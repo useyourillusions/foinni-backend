@@ -12,9 +12,10 @@ const checkForAuthToken = require('./helpers/check-for-auth-token');
 const wrongRouteHandler = require('./helpers/wrong-route');
 const loginRequired = require('./helpers/login-required');
 
-const signUpHandlerPost = require('./routes/users/sign-up/sign-up');
-const signInHandlerPost = require('./routes/users/sig-in/sign-in');
-// const userDataHandlerGet = require('./routes/get/user');
+const signUpHandlerPost = require('./routes/auth/sign-up/sign-up');
+const signInHandlerPost = require('./routes/auth/sig-in/sign-in');
+
+const userDataHandlerGet = require('./routes/user/get-data/get-data');
 
 // const refreshHandlerPost = require('./routes/post/refresh');
 // const logoutHandlerPost = require('./routes/post/logout');
@@ -47,8 +48,10 @@ app.get('/', (req, res) => res.send('Doge to the moon)))'));
 app.post('/api/sign-up', signUpHandlerPost);
 app.post('/api/sign-in', signInHandlerPost);
 
-// User data route
-// app.get('/api/user', loginRequired, userDataHandlerGet);
+
+// User data routes
+app.get('/api/user', loginRequired, userDataHandlerGet);
+
 
 // Advertisement route
 // app

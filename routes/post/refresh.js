@@ -20,9 +20,7 @@ const refreshHandlerPost = async (req, res) => {
         req.body.refreshToken, env[env.mode]['jwtKey'],
         (err, decode) => {
             if (err) {
-                if (err.message === 'jwt expired') {
-                    isRefreshExpired = true;
-                }
+                isRefreshExpired = err.message === 'jwt expired';
                 return;
             }
             userId = decode.userId || null;

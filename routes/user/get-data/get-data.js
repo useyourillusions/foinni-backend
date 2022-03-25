@@ -1,4 +1,4 @@
-const responseSender = require('../../helpers/response-sender');
+const responseSender = require('../../../helpers/response-sender');
 
 const userDataHandlerGet = (req, res) =>
     responseSender(res, 200, 'Got it!', {

@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const signInHandlerPost = async (req, res) => {
-
     if (!req.body.email || !req.body.password) {
         return responseSender(res, 422, 'You\'ve missed something important...');
     }

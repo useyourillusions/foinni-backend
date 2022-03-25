@@ -2,8 +2,6 @@ const User = require('../../../database/models/User');
 const responseSender = require('../../../helpers/response-sender');
 
 const signUpHandlerPost = async (req, res) => {
-    console.log(req.body);
-
     if (
         !req.body.firstName ||
         !req.body.lastName ||
