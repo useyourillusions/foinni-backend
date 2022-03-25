@@ -1,0 +1,13 @@
+{
+  "mode": "dev",
+
+  "dev": {
+    "appPort": 5000,
+    "dbUri": "mongodb://localhost/",
+    "dbName": "testDb",
+    "jwtKey": "TOP_SECRET"
+  },
+
+  "prod": {
+  }
+}
