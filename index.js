@@ -39,6 +39,10 @@ app.use(bodyParser.json());
 app.use(checkForAuthToken);
 
 
+// Empty route stub
+app.get('/', (req, res) => res.send('Doge to the moon)))'));
+
+
 // Authentication routes
 app.post('/api/sign-up', signUpHandlerPost);
 app.post('/api/sign-in', signInHandlerPost);
@@ -67,7 +71,5 @@ app.post('/api/sign-in', signInHandlerPost);
 // app.post('/api/logout', logoutHandlerPost);
 
 app.use(wrongRouteHandler);
-app.listen(
-    env[env.mode]['appPort'],
-    () => console.log(`Server started at port ${env[env.mode]['appPort']}`)
+app.listen(PORT, () => console.log(`Server started at the port ${PORT}`)
 );
