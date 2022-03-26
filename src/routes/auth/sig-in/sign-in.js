@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const env = require('../../../environment.json');
+const env = require('../../../../environment.json');
 const Users = require('../../../database/models/User');
 const responseSender = require('../../../helpers/response-sender');
 const bcrypt = require('bcrypt');

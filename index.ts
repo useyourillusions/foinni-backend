@@ -4,18 +4,18 @@ const { MONGO_USER, MONGO_PASSWORD, MONGO_DB_NAME, PORT = 5000 } = process.env;
 
 const env = require('./environment.json');
 const cors = require('cors');
-const express = require('express');
+import express from 'express';
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const checkDbConnection = require('./helpers/check-db-connection');
-const checkForAuthToken = require('./helpers/check-for-auth-token');
-const wrongRouteHandler = require('./helpers/wrong-route');
-const loginRequired = require('./helpers/login-required');
+const checkDbConnection = require('./src/helpers/check-db-connection');
+const checkForAuthToken = require('./src/helpers/check-for-auth-token');
+const wrongRouteHandler = require('./src/helpers/wrong-route');
+const loginRequired = require('./src/helpers/login-required');
 
-const signUpHandlerPost = require('./routes/auth/sign-up/sign-up');
-const signInHandlerPost = require('./routes/auth/sig-in/sign-in');
+const signUpHandlerPost = require('./src/routes/auth/sign-up/sign-up');
+const signInHandlerPost = require('./src/routes/auth/sig-in/sign-in');
 
-const userDataHandlerGet = require('./routes/user/get-data/get-data');
+const userDataHandlerGet = require('./src/routes/user/get-data/get-data');
 
 // const refreshHandlerPost = require('./routes/post/refresh');
 // const logoutHandlerPost = require('./routes/post/logout');
@@ -29,7 +29,7 @@ mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_DB_NAME}
 })
 .then(
     () => console.log('Database connection established'),
-    err => console.log(`Database connection error: ${err.name}`)
+    (err: { name: string }) => console.log(`Database connection error: ${err.name}`)
 );
 
 

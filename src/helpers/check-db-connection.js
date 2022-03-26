@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const responseSender = require('../helpers/response-sender');
+const responseSender = require('./response-sender');
 
 const checkDbConnection = (req, res, next) => {
 

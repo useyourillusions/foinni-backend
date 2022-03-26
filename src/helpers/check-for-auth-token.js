@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const env = require('../environment.json');
+const env = require('../../environment.json');
 
 const checkForAuthToken = async (req, res, next) => {
 
