@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const responseSender = require('./response-sender');
+import mongoose from 'mongoose';
+const responseSender = require('../helpers/response-sender');
 
 const checkDbConnection = (req, res, next) => {
 
@@ -9,4 +9,4 @@ const checkDbConnection = (req, res, next) => {
     next();
 };
 
-module.exports = checkDbConnection;
+export { checkDbConnection }

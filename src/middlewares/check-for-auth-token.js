@@ -1,8 +1,7 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 const env = require('../../environment.json');
 
 const checkForAuthToken = async (req, res, next) => {
-
     if (
         req.headers &&
         req.headers.authorization &&
@@ -24,4 +23,4 @@ const checkForAuthToken = async (req, res, next) => {
     next();
 };
 
-module.exports = checkForAuthToken;
+export { checkForAuthToken };

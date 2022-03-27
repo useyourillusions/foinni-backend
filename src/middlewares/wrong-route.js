@@ -3,8 +3,8 @@ const wrongRouteHandler = (req, res) => {
         .status(404)
         .json({
             code: 404,
-            message: 'Resource not found...'
+            message: 'There is no the resource you looking for!'
         });
 };
 
-module.exports = wrongRouteHandler;
+export { wrongRouteHandler };
