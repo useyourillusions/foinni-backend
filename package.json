@@ -4,8 +4,9 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "npx nodemon index.ts",
-    "start:ts": "tsc && node dist/index.js",
-    "start:prod": "node index.js --prod",
+    "start:prod": "ls && chmod a+x ./build/index.js && node ./build/index.js --prod",
+    "build": "rimraf ./build && tsc",
+    "heroku-postbuild": "npm run build && rimraf ./src ./index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Useyourillusions",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@types/express": "^4.16.1",
     "nodemon": "^2.0.15",
+    "rimraf": "^3.0.2",
     "typescript": "^4.6.3"
   },
   "engines": {

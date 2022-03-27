@@ -13,7 +13,7 @@
       "resolveJsonModule": true,
       // "isolatedModules": true,
       // "noEmit": true,
-      "outDir": "./dist"
+      "outDir": "./build"
     },
     // "include": [
     //     "src",
