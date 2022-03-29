@@ -1,6 +1,8 @@
-const isObjectIdValid = require('mongoose').Types.ObjectId.isValid;
-const responseSender = require('../helpers/response-sender');
-const User = require('../database/models/User');
+import mongoose from 'mongoose';
+import { responseSender } from '../helpers/response-sender';
+import { User } from '../database/models/Users';
+
+const isObjectIdValid = mongoose.Types.ObjectId.isValid;
 
 const loginRequired = async (req, res, next) => {
     if (!req.userId || !isObjectIdValid(req.userId)) {

@@ -1,11 +1,12 @@
-const jwt = require('jsonwebtoken');
-const env = require('../../../../environment.json');
-const Users = require('../../../database/models/User');
-const responseSender = require('../../../helpers/response-sender');
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { Response, Request } from 'express';
+import { Users } from '../../../database/models/Users';
+import { responseSender } from '../../../helpers/response-sender';
+
 const saltRounds = 10;
 
-const signInHandlerPost = async (req, res) => {
+const signInHandlerPost = async (req: Request, res: Response) => {
     if (!req.body.email || !req.body.password) {
         return responseSender(res, 422, 'You\'ve missed something important...');
     }
@@ -20,15 +21,13 @@ const signInHandlerPost = async (req, res) => {
         return responseSender(res, 401, 'Authentication failed. User not found!');
     }
 
-    // console.log(user, req.body.password);
-
     if (!user.comparePassword(String(req.body.password))) {
         return responseSender(res, 401, 'Authentication failed. Wrong password!');
     }
 
     const accessToken = jwt.sign(
         { userId: user._id },
-        env[env.mode]['jwtKey'],
+        'TOP_SECRET',
         { expiresIn: '1h' }
     );
 
@@ -36,7 +35,7 @@ const signInHandlerPost = async (req, res) => {
             userId: user._id,
             proofOfRefresh
         },
-        env[env.mode]['jwtKey'],
+        'TOP_SECRET',
         { expiresIn: '1d' }
     );
 
@@ -54,4 +53,4 @@ const signInHandlerPost = async (req, res) => {
     });
 };
 
-module.exports = signInHandlerPost;
+export { signInHandlerPost };

@@ -1,13 +1,19 @@
-const isObjectIdValid = require('mongoose').Types.ObjectId.isValid;
-const jwt = require('jsonwebtoken');
-const env = require('../../environment.json');
-const Users = require('../../database/models/User');
-const responseSender = require('../../helpers/response-sender');
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import { Response, Request } from 'express';
+import { Users } from '../../../database/models/Users';
+import { responseSender } from '../../../helpers/response-sender';
+
+interface UserToken {
+    userId: string;
+    proofOfRefresh: string;
+}
+
 const saltRounds = 10;
+const isObjectIdValid = mongoose.Types.ObjectId.isValid;
 
-
-const refreshHandlerPost = async (req, res) => {
+const refreshHandlerPost = async (req: Request, res: Response) => {
     let userId = null;
     let currentProofOfRefresh = null;
     let isRefreshExpired = false;
@@ -16,17 +22,14 @@ const refreshHandlerPost = async (req, res) => {
         return responseSender(res, 401, 'Refresh failed!');
     }
 
-    jwt.verify(
-        req.body.refreshToken, env[env.mode]['jwtKey'],
-        (err, decode) => {
-            if (err) {
-                isRefreshExpired = err.message === 'jwt expired';
-                return;
-            }
-            userId = decode.userId || null;
-            currentProofOfRefresh = decode.proofOfRefresh || null;
-        }
-    );
+    try {
+        const decoded = jwt.verify(req.body.refreshToken, 'TOP_SECRET') as UserToken;
+
+        userId = decoded.userId || null;
+        currentProofOfRefresh = decoded.proofOfRefresh || null;
+    } catch (err: any) {
+        isRefreshExpired = err.message === 'jwt expired';
+    }
 
     if (
         !userId ||
@@ -53,7 +56,7 @@ const refreshHandlerPost = async (req, res) => {
 
     const newAccessToken = jwt.sign(
         { userId },
-        env[env.mode]['jwtKey'],
+        'TOP_SECRET',
         { expiresIn: '1h' }
     );
 
@@ -62,7 +65,7 @@ const refreshHandlerPost = async (req, res) => {
             userId,
             proofOfRefresh: newProofOfRefresh
         },
-        env[env.mode]['jwtKey'],
+        'TOP_SECRET',
         { expiresIn: '1d' }
     );
 
@@ -74,4 +77,4 @@ const refreshHandlerPost = async (req, res) => {
     });
 };
 
-module.exports = refreshHandlerPost;
+export { refreshHandlerPost };
