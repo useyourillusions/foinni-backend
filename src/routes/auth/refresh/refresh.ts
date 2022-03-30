@@ -7,15 +7,15 @@ import { responseSender } from '../../../helpers/response-sender';
 
 interface UserToken {
     userId: string;
-    proofOfRefresh: string;
+    refreshHashKey: string;
 }
 
 const saltRounds = 10;
 const isObjectIdValid = mongoose.Types.ObjectId.isValid;
 
-const refreshHandlerPost = async (req: Request, res: Response) => {
+export const refreshHandlerPost = async (req: Request, res: Response) => {
     let userId = null;
-    let currentProofOfRefresh = null;
+    let currentRefreshHashKey = null;
     let isRefreshExpired = false;
 
     if (!req.body.refreshToken) {
@@ -26,7 +26,7 @@ const refreshHandlerPost = async (req: Request, res: Response) => {
         const decoded = jwt.verify(req.body.refreshToken, 'TOP_SECRET') as UserToken;
 
         userId = decoded.userId || null;
-        currentProofOfRefresh = decoded.proofOfRefresh || null;
+        currentRefreshHashKey = decoded.refreshHashKey || null;
     } catch (err: any) {
         isRefreshExpired = err.message === 'jwt expired';
     }
@@ -34,20 +34,20 @@ const refreshHandlerPost = async (req: Request, res: Response) => {
     if (
         !userId ||
         !isObjectIdValid(userId) ||
-        !currentProofOfRefresh ||
+        !currentRefreshHashKey ||
         isRefreshExpired
     ) {
         return responseSender(res, 401, 'Refresh failed!');
     }
 
 
-    const newProofOfRefresh = bcrypt.hashSync(Date.now().toString(), saltRounds);
+    const newRefreshHashKey = bcrypt.hashSync(Date.now().toString(), saltRounds);
     const user = await Users.findOneAndUpdate(
         {
             _id: userId,
-            proofOfRefresh: currentProofOfRefresh
+            refreshHashKey: currentRefreshHashKey
         },
-        { proofOfRefresh: newProofOfRefresh }
+        { refreshHashKey: newRefreshHashKey }
     );
 
     if (!user) {
@@ -63,7 +63,7 @@ const refreshHandlerPost = async (req: Request, res: Response) => {
     const newRefreshToken = jwt.sign(
         {
             userId,
-            proofOfRefresh: newProofOfRefresh
+            refreshHashKey: newRefreshHashKey
         },
         'TOP_SECRET',
         { expiresIn: '1d' }
@@ -76,5 +76,3 @@ const refreshHandlerPost = async (req: Request, res: Response) => {
         }
     });
 };
-
-export { refreshHandlerPost };

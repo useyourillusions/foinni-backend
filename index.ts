@@ -40,7 +40,11 @@ app.use(checkForAuthToken);
 
 
 // Empty route stub
-app.get('/', (req, res) => res.send('Doge to the moon)))'));
+app.get('/', (req, res) => res.send(`
+    <center>
+        <img src="https://coincompare.eu/wp-content/uploads/2020/08/Dogecoin-rise-due-to-TikTokkers-2020.gif" alt="Doge to the moon)))">
+    </center>
+`));
 
 
 // Authentication routes

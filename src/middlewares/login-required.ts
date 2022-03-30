@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
+import { Response, Request, NextFunction } from 'express';
 import { responseSender } from '../helpers/response-sender';
-import { User } from '../database/models/Users';
+import { Users } from '../database/models/Users';
 
 const isObjectIdValid = mongoose.Types.ObjectId.isValid;
 
-const loginRequired = async (req, res, next) => {
+export const loginRequired = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.userId || !isObjectIdValid(req.userId)) {
         if (req.isAccessJwtExpired) {
             return responseSender(res, 401, 'Authentication failed!', { needRefresh: true });
@@ -14,7 +15,7 @@ const loginRequired = async (req, res, next) => {
     }
 
     try {
-        const user = await User.findOne({_id: req.userId});
+        const user = await Users.findOne({_id: req.userId});
 
         if (!user) {
             return responseSender(res, 422, 'User doesn\'t exist!');
@@ -22,11 +23,10 @@ const loginRequired = async (req, res, next) => {
 
         req['user'] = user.toJSON();
 
-    } catch (err) {
+    } catch (err: any) {
         return responseSender(res, 500, err.message);
     }
 
     next();
 };
 
-export { loginRequired };

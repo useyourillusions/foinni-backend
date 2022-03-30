@@ -6,15 +6,15 @@ import { responseSender } from '../../../helpers/response-sender';
 
 const saltRounds = 10;
 
-const signInHandlerPost = async (req: Request, res: Response) => {
+export const signInHandlerPost = async (req: Request, res: Response) => {
     if (!req.body.email || !req.body.password) {
         return responseSender(res, 422, 'You\'ve missed something important...');
     }
 
-    const proofOfRefresh = bcrypt.hashSync(Date.now().toString(), saltRounds);
+    const refreshHashKey = bcrypt.hashSync(Date.now().toString(), saltRounds);
     const user = await Users.findOneAndUpdate(
         { email: req.body.email },
-        { proofOfRefresh }
+        { refreshHashKey }
     );
 
     if (!user) {
@@ -33,7 +33,7 @@ const signInHandlerPost = async (req: Request, res: Response) => {
 
     const refreshToken = jwt.sign({
             userId: user._id,
-            proofOfRefresh
+            refreshHashKey
         },
         'TOP_SECRET',
         { expiresIn: '1d' }
@@ -53,4 +53,3 @@ const signInHandlerPost = async (req: Request, res: Response) => {
     });
 };
 
-export { signInHandlerPost };

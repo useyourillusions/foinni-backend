@@ -33,7 +33,7 @@ const UsersSchema = new mongoose.Schema({
         type: String,
         default: 'https://dummyimage.com/300x300/000/ff7800.png'
     },
-    proofOfRefresh: {
+    refreshHashKey: {
         type: String,
         default: ''
     }
@@ -51,6 +51,4 @@ UsersSchema.methods.comparePassword = function(password: string) {
     return bcrypt.compareSync(password, this.password)
 };
 
-const Users = mongoose.model('User', UsersSchema);
-
-export { Users };
+export const Users = mongoose.model('User', UsersSchema);

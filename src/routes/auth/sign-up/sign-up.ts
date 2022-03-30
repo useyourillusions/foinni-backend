@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { Users } from '../../../database/models/Users';
 import { responseSender } from '../../../helpers/response-sender';
 
-const signUpHandlerPost = async (req: Request, res: Response) => {
+export const signUpHandlerPost = async (req: Request, res: Response) => {
     if (
         !req.body.firstName ||
         !req.body.lastName ||
@@ -28,4 +28,3 @@ const signUpHandlerPost = async (req: Request, res: Response) => {
     }
 };
 
-export { signUpHandlerPost };

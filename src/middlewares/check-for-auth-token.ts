@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Response, Request, NextFunction } from 'express';
 
-const checkForAuthToken = async (req: Request, res: Response, next: NextFunction) => {
+export const checkForAuthToken = async (req: Request, res: Response, next: NextFunction) => {
     if (
         req.headers &&
         req.headers.authorization &&
@@ -22,5 +22,3 @@ const checkForAuthToken = async (req: Request, res: Response, next: NextFunction
 
     next();
 };
-
-export { checkForAuthToken };
