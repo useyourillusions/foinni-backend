@@ -1,7 +1,8 @@
-const User = require('../../../database/models/User');
-const responseSender = require('../../../helpers/response-sender');
+import { Response, Request } from 'express';
+import { Users } from '../../../database/models/Users';
+import { responseSender } from '../../../helpers/response-sender';
 
-const signUpHandlerPost = async (req, res) => {
+export const signUpHandlerPost = async (req: Request, res: Response) => {
     if (
         !req.body.firstName ||
         !req.body.lastName ||
@@ -11,8 +12,8 @@ const signUpHandlerPost = async (req, res) => {
         return responseSender(res, 422, 'You\'ve missed something important...');
     }
 
-    const user = new User(req.body);
-    const isUserExist = await User.findOne({ email: req.body.email });
+    const user = new Users(req.body);
+    const isUserExist = await Users.findOne({ email: req.body.email });
 
     if (isUserExist) {
         return responseSender(res, 409, 'Email is already taken!');
@@ -22,9 +23,8 @@ const signUpHandlerPost = async (req, res) => {
         await user.save();
         responseSender(res, 200, 'User has been registered!');
 
-    } catch (err) {
+    } catch (err: any) {
         responseSender(res, 500, err.message);
     }
 };
 
-module.exports = signUpHandlerPost;

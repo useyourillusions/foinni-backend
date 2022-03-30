@@ -1,6 +1,8 @@
 .DS_STORE
 
+set_env.cmd
 /dist/
+/build/
 /bazel-out
 /integration/bazel/bazel-*
 *.log
