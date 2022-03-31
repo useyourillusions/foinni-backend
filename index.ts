@@ -21,15 +21,11 @@ import { userDataHandlerGet } from './src/routes/user/get-data/get-data';
 
 const app = express();
 
-mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_DB_NAME}.v5bgq.mongodb.net/${MONGO_DB_NAME}?retryWrites=true&w=majority`, {
-    // useNewUrlParser: true,
-    // useCreateIndex: true,
-    // useFindAndModify: false
-})
-.then(
-    () => console.log('Database connection established'),
-    (err: { name: string }) => console.log(`Database connection error: ${err.name}`)
-);
+mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_DB_NAME}.v5bgq.mongodb.net/${MONGO_DB_NAME}?retryWrites=true&w=majority`)
+    .then(
+        () => console.log('Database connection established'),
+        (err: { name: string }) => console.log(`Database connection error: ${err.name}`)
+    );
 
 
 app.use(cors());
@@ -48,16 +44,16 @@ app.get('/', (req, res) => res.send(`
 
 
 // Authentication routes
-app.post('/api/sign-up', signUpHandlerPost);
-app.post('/api/sign-in', signInHandlerPost);
-app.post('/api/refresh', refreshHandlerPost);
-app.post('/api/sign-out', signOutHandlerPost);
+app.post('/api/v1/sign-up', signUpHandlerPost);
+app.post('/api/v1/sign-in', signInHandlerPost);
+app.post('/api/v1/refresh', refreshHandlerPost);
+app.post('/api/v1/sign-out', signOutHandlerPost);
 
 
 // User routes
-app.get('/api/user', loginRequired, userDataHandlerGet);
+app.get('/api/v1/user', loginRequired, userDataHandlerGet);
 
 
 app.use(wrongRouteHandler);
-app.listen(PORT, () => console.log(`Server started at the port ${PORT}`)
-);
+app.listen(PORT, () => console.log(`Server started at the port ${PORT}`));
+
