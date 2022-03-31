@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Response, Request, NextFunction } from 'express';
-import { responseSender } from '../helpers/response-sender';
+import { responseSender } from '../helpers';
 
 export const checkDbConnection = (req: Request, res: Response, next: NextFunction) => {
     if (mongoose.connection.readyState !== 1) {

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { Response, Request } from 'express';
 import { Users } from '../../../database/models/Users';
-import { responseSender } from '../../../helpers/response-sender';
+import { responseSender } from '../../../helpers';
 
 const isObjectIdValid = mongoose.Types.ObjectId.isValid;
 

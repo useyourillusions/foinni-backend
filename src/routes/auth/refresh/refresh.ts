@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { Response, Request } from 'express';
 import { Users } from '../../../database/models/Users';
-import { responseSender } from '../../../helpers/response-sender';
+import { responseSender } from '../../../helpers';
 
 interface UserToken {
     userId: string;

@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { responseSender } from '../../../helpers/response-sender';
+import { responseSender } from '../../../helpers';
 
 export const userDataHandlerGet = (req: Request, res: Response) =>
     responseSender(res, 200, 'Got it!', {

@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import { Response, Request, NextFunction } from 'express';
-import { responseSender } from '../helpers/response-sender';
 import { Users } from '../database/models/Users';
+import { responseSender } from '../helpers';
 
 const isObjectIdValid = mongoose.Types.ObjectId.isValid;
 
-export const loginRequired = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserData = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.userId || !isObjectIdValid(req.userId)) {
         if (req.isAccessJwtExpired) {
             return responseSender(res, 401, 'Authentication failed!', { needRefresh: true });

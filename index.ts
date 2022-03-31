@@ -6,18 +6,19 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-
-import { checkDbConnection } from './src/middlewares/check-db-connection';
-import { checkForAuthToken } from './src/middlewares/check-for-auth-token';
-import { wrongRouteHandler } from './src/middlewares/wrong-route';
-import { loginRequired } from './src/middlewares/login-required';
-
-import { signUpHandlerPost } from './src/routes/auth/sign-up/sign-up';
-import { signInHandlerPost } from './src/routes/auth/sig-in/sign-in';
-import { refreshHandlerPost } from './src/routes/auth/refresh/refresh';
-import { signOutHandlerPost } from './src/routes/auth/sign-out/sign-out';
-
-import { userDataHandlerGet } from './src/routes/user/get-data/get-data';
+import {
+    checkDbConnection,
+    parseAuthToken,
+    wrongRouteHandler,
+    getUserData
+} from './src/middlewares';
+import {
+    signUpHandlerPost,
+    signInHandlerPost,
+    refreshHandlerPost,
+    signOutHandlerPost
+} from './src/routes/auth';
+import { userDataHandlerGet } from './src/routes/user';
 
 const app = express();
 
@@ -32,7 +33,7 @@ app.use(cors());
 app.use(express.static('_public'));
 app.use(checkDbConnection);
 app.use(bodyParser.json());
-app.use(checkForAuthToken);
+app.use(parseAuthToken);
 
 
 // Empty route stub
@@ -51,7 +52,7 @@ app.post('/api/v1/sign-out', signOutHandlerPost);
 
 
 // User routes
-app.get('/api/v1/user', loginRequired, userDataHandlerGet);
+app.get('/api/v1/user', getUserData, userDataHandlerGet);
 
 
 app.use(wrongRouteHandler);
