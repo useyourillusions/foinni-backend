@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Response, Request } from 'express';
 import { Users } from '../../../database/models/Users';
-import { responseSender } from '../../../helpers/response-sender';
+import { responseSender } from '../../../helpers';
 
 const schema = Joi.object().keys({ 
     email: Joi.string().email().required(),
@@ -30,7 +30,7 @@ export const signInHandlerPost = async (req: Request, res: Response) => {
         return responseSender(res, 401, 'Authentication failed. User not found!');
     }
 
-    if (!user.comparePassword(String(req.body.password))) {
+    if (!user.comparePassword(req.body.password)) {
         return responseSender(res, 401, 'Authentication failed. Wrong password!');
     }
 

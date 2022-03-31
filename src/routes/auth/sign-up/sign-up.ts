@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { Response, Request } from 'express';
 import { Users } from '../../../database/models/Users';
-import { responseSender } from '../../../helpers/response-sender';
+import { responseSender } from '../../../helpers';
 
 const schema = Joi.object().keys({ 
     firstName: Joi.string().required(),
@@ -13,8 +13,6 @@ const schema = Joi.object().keys({
 export const signUpHandlerPost = async (req: Request, res: Response) => {
     const { body } = req;
     const { error } = schema.validate(body);
-
-    console.log(error);
 
     if (error) {
         return responseSender(res, 422, error.message);
