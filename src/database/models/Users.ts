@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+
 const saltRounds = 10;
 
-const validateEmail = email =>
+const validateEmail = (email: string) =>
     /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
 
-const UserSchema = new mongoose.Schema({
+const UsersSchema = new mongoose.Schema({
     firstName: {
         type: String,
         required: true,
@@ -32,13 +33,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: 'https://dummyimage.com/300x300/000/ff7800.png'
     },
-    proofOfRefresh: {
+    refreshHashKey: {
         type: String,
         default: ''
     }
 });
 
-UserSchema.pre('save', function(next) {
+UsersSchema.pre('save', function(next) {
     const user = this;
     const hash = bcrypt.hashSync(user.password, saltRounds);
 
@@ -46,10 +47,8 @@ UserSchema.pre('save', function(next) {
     next();
 });
 
-UserSchema.methods.comparePassword = function(password) {
+UsersSchema.methods.comparePassword = function(password: string) {
     return bcrypt.compareSync(password, this.password)
 };
 
-const User = mongoose.model('User', UserSchema);
-
-module.exports = User;
+export const Users = mongoose.model('User', UsersSchema);

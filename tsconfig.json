@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "allowJs": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "typeRoots": ["./types"],
+        "outDir": "./build",
+        "strict": true
+    },
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ],
+}
+
