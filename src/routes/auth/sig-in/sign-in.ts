@@ -1,14 +1,23 @@
+import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Response, Request } from 'express';
 import { Users } from '../../../database/models/Users';
 import { responseSender } from '../../../helpers/response-sender';
 
+const schema = Joi.object().keys({ 
+    email: Joi.string().email().required(),
+    password: Joi.string().min(1).max(25).required(), 
+    // password: Joi.string().min(5).max(25).required(), 
+  }); 
 const saltRounds = 10;
 
 export const signInHandlerPost = async (req: Request, res: Response) => {
-    if (!req.body.email || !req.body.password) {
-        return responseSender(res, 422, 'You\'ve missed something important...');
+    const { body } = req;
+    const { error } = schema.validate(body);
+
+    if (error) {
+        return responseSender(res, 422, error.message);
     }
 
     const refreshHashKey = bcrypt.hashSync(Date.now().toString(), saltRounds);

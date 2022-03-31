@@ -1,7 +1,7 @@
 {
   "name": "foinni-backend",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "nodemon --watch src --ext ts,json --ignore src/**/*.spec.ts --exec npx ts-node --files ./index.ts",
     "start:prod": "ls && chmod a+x ./build/index.js && node ./build/index.js --prod",
@@ -17,6 +17,7 @@
     "body-parser": "^1.19.2",
     "cors": "^2.8.5",
     "express": "^4.17.3",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.8",
