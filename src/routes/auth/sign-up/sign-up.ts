@@ -33,4 +33,3 @@ export const signUpHandlerPost = async (req: Request, res: Response) => {
         responseSender(res, 500, err.message);
     }
 };
-

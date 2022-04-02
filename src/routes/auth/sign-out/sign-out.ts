@@ -21,4 +21,3 @@ export const signOutHandlerPost = async (req: Request, res: Response) => {
 
     responseSender(res, 200, 'Backend sign-out succeeded!');
 };
-
