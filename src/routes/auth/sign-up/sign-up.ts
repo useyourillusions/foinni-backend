@@ -3,9 +3,9 @@ import { Response, Request } from 'express';
 import { Users } from '../../../database/models/Users';
 import { responseSender } from '../../../helpers';
 
-const schema = Joi.object().keys({ 
-    firstName: Joi.string().required(),
-    lastName: Joi.string(),
+const schema = Joi.object().keys({
+    firstName: Joi.string().trim().required(),
+    lastName: Joi.string().trim().default('-'),
     email: Joi.string().email().required(),
     password: Joi.string().min(5).max(25).required(), 
 }); 
@@ -33,4 +33,3 @@ export const signUpHandlerPost = async (req: Request, res: Response) => {
         responseSender(res, 500, err.message);
     }
 };
-
