@@ -6,6 +6,8 @@ Technologies I used:
 - JWT
 - Joi validation
 - MongoDB
+- Heroku
+- Gihub Actions
 - ✨Magic ✨
 
 ---

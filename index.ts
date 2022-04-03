@@ -17,9 +17,12 @@ import {
     signUpHandlerPost,
     signInHandlerPost,
     refreshHandlerPost,
-    signOutHandlerPost
+    signOutHandlerPost,
 } from './src/routes/auth';
-import { userDataHandlerGet } from './src/routes/user';
+import {
+    userDataHandlerGet,
+    userDataHandlerPatch,
+} from './src/routes/user';
 import 'express-async-errors';
 
 const app = express();
@@ -53,6 +56,7 @@ app.use(parseAuthToken);
 app.post('/api/v1/refresh', refreshHandlerPost);
 app.post('/api/v1/sign-out', signOutHandlerPost);
 app.get('/api/v1/user', getUserData, userDataHandlerGet);
+app.patch('/api/v1/user', getUserData, userDataHandlerPatch);
 
 
 app.use(wrongRouteHandler);
