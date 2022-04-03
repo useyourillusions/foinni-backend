@@ -70,9 +70,7 @@ export const refreshHandlerPost = async (req: Request, res: Response) => {
     );
 
     responseSender(res, 200, 'Refresh succeeded!', {
-        token: {
-            accessToken: newAccessToken,
-            refreshToken: newRefreshToken
-        }
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken
     });
 };

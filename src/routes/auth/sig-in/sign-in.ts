@@ -7,7 +7,7 @@ import { responseSender } from '../../../helpers';
 
 const schema = Joi.object().keys({ 
     email: Joi.string().email().required(),
-    password: Joi.string().min(5).max(25).required(), 
+    password: Joi.string().min(5).max(25).required(),
   }); 
 const saltRounds = 10;
 
