@@ -47,15 +47,6 @@ UsersSchema.pre('save', function(next) {
     next();
 });
 
-// UsersSchema.pre('save', function(next) {
-//     const user = this;
-//     const hash = bcrypt.hashSync(user.password, saltRounds);
-
-//     user.password = hash;
-//     next();
-// });
-
-
 UsersSchema.methods.comparePassword = function(password: string) {
     return bcrypt.compareSync(password, this.password)
 };

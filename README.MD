@@ -1,4 +1,4 @@
-## A simple node.js application which allows to create users, sign-in, and get users data by token
+## A simple node.js application which allows to create users, sign-in, get and modify users data
 
 Technologies I used:
 - Express
@@ -7,7 +7,7 @@ Technologies I used:
 - Joi validation
 - MongoDB
 - Heroku
-- Gihub Actions
+- Github Actions
 - ✨Magic ✨
 
 ---

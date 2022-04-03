@@ -12,29 +12,22 @@ const schema = Joi.object().keys({
 
 export const userDataHandlerPatch = async (req: Request, res: Response) => {
     const { body, userId } = req;
-    const { error, value: { password, ...valuesForUpdate } } = schema.validate(body);
+    const { error, value: { password, ...fieldsToUpdate } } = schema.validate(body);
 
     if (error) {
         return responseSender(res, 422, error.message);
-    } else {
-        return res.status(200).json(valuesForUpdate);
     }
 
-    const user = new Users(body);
-    const isUpdated = await Users.findOneAndUpdate(
-        { _id: userId },
-        valuesForUpdate,
-    );
+    const user = await Users.findById(userId);
+    const isPasswordsMatch = user.comparePassword(body.password);
 
-    if (isUpdated) {
-        return responseSender(res, 409, 'Email is already taken!');
+    if (!isPasswordsMatch) {
+        return responseSender(res, 401, 'Password doesn\'t match!');
     }
 
-    try {
-        await user.save();
-        responseSender(res, 200, 'User has been registered!');
+    const updatedUser = await Users
+        .findByIdAndUpdate(userId, fieldsToUpdate, { returnOriginal: false })
+        .select(['-_id', '-__v', '-password', '-refreshHashKey']);
 
-    } catch (err: any) {
-        responseSender(res, 500, err.message);
-    }
+    responseSender(res, 200, `${Object.keys(fieldsToUpdate).join(', ')} updated`, updatedUser);
 }
