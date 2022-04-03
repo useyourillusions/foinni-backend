@@ -1,6 +1,7 @@
 'use strict';
 
 const { MONGO_USER, MONGO_PASSWORD, MONGO_DB_NAME, PORT = 5000 } = process.env;
+const DB_CONNECTION_STRING = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_DB_NAME}.v5bgq.mongodb.net/${MONGO_DB_NAME}?retryWrites=true&w=majority`;
 
 import cors from 'cors';
 import express from 'express';
@@ -17,19 +18,20 @@ import {
     signUpHandlerPost,
     signInHandlerPost,
     refreshHandlerPost,
-    signOutHandlerPost
+    signOutHandlerPost,
 } from './src/routes/auth';
-import { userDataHandlerGet } from './src/routes/user';
+import {
+    userDataHandlerGet,
+    userDataHandlerPatch,
+} from './src/routes/user';
 import 'express-async-errors';
 
 const app = express();
 
-mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_DB_NAME}.v5bgq.mongodb.net/${MONGO_DB_NAME}?retryWrites=true&w=majority`)
-    .then(
-        () => console.log('Database connection established'),
-        (err: { name: string }) => console.log(`Database connection error: ${err.name}`)
-    );
-
+mongoose.connect(DB_CONNECTION_STRING).then(
+    () => console.log('Database connection established'),
+    (err: { name: string }) => console.log(`Database connection error: ${err.name}`)
+);
 
 app.use(cors());
 app.use(express.static('_public'));
@@ -53,10 +55,10 @@ app.use(parseAuthToken);
 app.post('/api/v1/refresh', refreshHandlerPost);
 app.post('/api/v1/sign-out', signOutHandlerPost);
 app.get('/api/v1/user', getUserData, userDataHandlerGet);
+app.patch('/api/v1/user', userDataHandlerPatch);
 
 
 app.use(wrongRouteHandler);
 app.use(uncoughtErrorHandler);
 
 app.listen(PORT, () => console.log(`Server started at the port ${PORT}`));
-
