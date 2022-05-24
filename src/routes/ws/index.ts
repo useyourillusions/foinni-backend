@@ -1,1 +1,1 @@
-export * from './wsHandler';
+export * from './wsChatHandler';

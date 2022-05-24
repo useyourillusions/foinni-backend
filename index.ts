@@ -25,7 +25,7 @@ import {
     userDataHandlerGet,
     userDataHandlerPatch,
 } from './src/routes/user';
-import { wsHandler } from './src/routes/ws';
+import { wsChatHandler } from './src/routes/ws';
 import 'express-async-errors';
 
 const { app } = expressWs(express());
@@ -60,7 +60,7 @@ app.patch('/api/v1/user', userDataHandlerPatch);
 
 
 // --- WS ROUTES ---
-app.ws('/ws/chat', wsHandler);
+app.ws('/ws/chat', wsChatHandler);
 
 app.use(wrongRouteHandler);
 app.use(uncaughtErrorHandler);
