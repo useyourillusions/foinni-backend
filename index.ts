@@ -60,7 +60,7 @@ app.patch('/api/v1/user', userDataHandlerPatch);
 
 
 // --- WS ROUTES ---
-app.ws('/', wsHandler);
+app.ws('/ws/chat', wsHandler);
 
 app.use(wrongRouteHandler);
 app.use(uncaughtErrorHandler);
