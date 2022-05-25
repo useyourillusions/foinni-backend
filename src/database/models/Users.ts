@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
+import { createHash } from 'crypto';
 
 const saltRounds = 10;
 
@@ -31,7 +32,7 @@ const UsersSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        default: 'https://dummyimage.com/300x300/000/ff7800.png'
+        default: 'https://avatars.dicebear.com/api/bottts/default.svg'
     },
     refreshHashKey: {
         type: String,
@@ -42,8 +43,10 @@ const UsersSchema = new mongoose.Schema({
 UsersSchema.pre('save', function(next) {
     const user = this;
     const hash = bcrypt.hashSync(user.password, saltRounds);
+    const hashPhoto = createHash('sha256').update(user.email).digest('hex');
 
     user.password = hash;
+    user.photo = `https://avatars.dicebear.com/api/bottts/${hashPhoto}.svg`
     next();
 });
 

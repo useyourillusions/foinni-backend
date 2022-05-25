@@ -12,7 +12,7 @@ import {
     parseAuthToken,
     getUserData,
     wrongRouteHandler,
-    uncoughtErrorHandler,
+    uncaughtErrorHandler,
 } from './src/middlewares';
 import {
     signUpHandlerPost,
@@ -59,6 +59,6 @@ app.patch('/api/v1/user', userDataHandlerPatch);
 
 
 app.use(wrongRouteHandler);
-app.use(uncoughtErrorHandler);
+app.use(uncaughtErrorHandler);
 
 app.listen(PORT, () => console.log(`Server started at the port ${PORT}`));
