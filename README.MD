@@ -1,4 +1,4 @@
-## A simple node.js application which allows to create users, sign-in, get and modify users data
+## Node.js application which allows to create users, sign-in, get and modify users data. Also there is a live chat built with websockets.
 
 Technologies I used:
 - Express
@@ -6,6 +6,7 @@ Technologies I used:
 - JWT
 - Joi validation
 - MongoDB
+- WebSockets
 - Heroku
 - Github Actions
 - ✨Magic ✨

@@ -5,6 +5,7 @@ const DB_CONNECTION_STRING = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MO
 
 import cors from 'cors';
 import express from 'express';
+import expressWs from 'express-ws';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import {
@@ -24,9 +25,10 @@ import {
     userDataHandlerGet,
     userDataHandlerPatch,
 } from './src/routes/user';
+import { wsChatHandler } from './src/routes/ws';
 import 'express-async-errors';
 
-const app = express();
+const { app } = expressWs(express());
 
 mongoose.connect(DB_CONNECTION_STRING).then(
     () => console.log('Database connection established'),
@@ -45,7 +47,6 @@ app.get('/', (req, res) => res.send(`
         <img src="https://coincompare.eu/wp-content/uploads/2020/08/Dogecoin-rise-due-to-TikTokkers-2020.gif" alt="Doge to the moon)))">
     </center>
 `));
-
 app.post('/api/v1/sign-up', signUpHandlerPost);
 app.post('/api/v1/sign-in', signInHandlerPost);
 
@@ -57,6 +58,9 @@ app.post('/api/v1/sign-out', signOutHandlerPost);
 app.get('/api/v1/user', getUserData, userDataHandlerGet);
 app.patch('/api/v1/user', userDataHandlerPatch);
 
+
+// --- WS ROUTES ---
+app.ws('/ws/chat', wsChatHandler);
 
 app.use(wrongRouteHandler);
 app.use(uncaughtErrorHandler);
