@@ -1,6 +1,6 @@
 {
   "name": "foinni-backend",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "build/index.js",
   "scripts": {
     "start": "npx tsnd --respawn --files ./index.ts",
