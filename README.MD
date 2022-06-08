@@ -9,7 +9,6 @@ Technologies I used:
 - WebSockets
 - Heroku
 - Github Actions
-- ✨Magic ✨
 
 ---
 > Powered by Dogecoin)
