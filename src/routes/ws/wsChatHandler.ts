@@ -57,10 +57,13 @@ export const wsChatHandler = async (ws: ws, req: Request) => {
 
         wsSend(ws, 'INIT', {
             id: userData.id,
-            chatHistory: chatHistory.map(m => ({
-                id: m._id,
-                text: m.text,
-                author: { ...m.author }
+            chatHistory: chatHistory.map((message) => ({
+                id: message._id,
+                text: message.text,
+                author: { 
+                    name: message.author.name,
+                    photo: message.author.photo,
+                },
             })),
         });
     } catch(err) {
@@ -68,24 +71,32 @@ export const wsChatHandler = async (ws: ws, req: Request) => {
     }
     
     ws.on('message', async (data: string) => {
+        // TODO: Add text validation
         const action = JSON.parse(data);
 
         switch(action.type) {
             case 'NEW_MESSAGE': {
                 const message = new Message({
                     author: userData,
-                    text: action.payload, 
+                    text: action.payload,
+                    date_added: new Date(),
                 });
-                const savedMessage = await message.save();
- 
-                cons.forEach(({ wsCon }) => wsSend(wsCon, 'NEW_MESSAGE', {
-                    id: savedMessage._id,
-                    text: savedMessage.text,
-                    author: {
-                        name: savedMessage.author.name,
-                        photo: savedMessage.author.photo,
-                    },
-                }));
+
+                try {
+                    const savedMessage = await message.save();
+    
+                    cons.forEach(({ wsCon }) => wsSend(wsCon, 'NEW_MESSAGE', {
+                        id: savedMessage._id,
+                        text: savedMessage.text,
+                        author: {
+                            name: savedMessage.author.name,
+                            photo: savedMessage.author.photo,
+                        },
+                    }));
+
+                } catch (err) {
+                    console.error(err)
+                }
                 break;
             }
 
@@ -95,6 +106,20 @@ export const wsChatHandler = async (ws: ws, req: Request) => {
                         wsSend(wsCon, 'TYPING', userData.name);
                     }
                 }); 
+                break;
+            }
+
+            case 'REMOVE_ALL': {
+                let removeStatus = true;
+
+                try {
+                    await Message.deleteMany({});   
+                } catch (err) {
+                    removeStatus = false;
+                    console.error(err);
+                }
+
+                cons.forEach(({ wsCon }) => wsSend(wsCon, 'REMOVE_ALL', removeStatus));
                 break;
             }
         }

@@ -23,22 +23,10 @@ const MessageSchema = new mongoose.Schema({
             trim: true,
         },
   },
+  date_added: {
+    type: Date,
+    required: true,
+  }
 });
-
-MessageSchema.pre('save', function(next) {
-    this.author.id = new mongoose.Types.ObjectId(this.author.id);
-    next();
-});
-
-// Duplicate the ID field.
-// MessageSchema.virtual('id').get(function(){
-    // @ts-ignore
-    // return this._id.toHexString();
-// });
-
-// Ensure virtual fields are serialised.
-// MessageSchema.set('toJSON', {
-    // virtuals: true
-// });
 
 export const Message = mongoose.model('Message', MessageSchema);

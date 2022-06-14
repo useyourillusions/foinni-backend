@@ -5,7 +5,8 @@ const {
     MONGO_PASSWORD,
     MONGO_CLUSTER,
     MONGO_DB_NAME,
-    PORT = 5000 } = process.env;
+    PORT = 5000,
+} = process.env;
 const DB_CONNECTION_STRING = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER}.v5bgq.mongodb.net/${MONGO_DB_NAME}?retryWrites=true&w=majority`;
 
 import cors from 'cors';
