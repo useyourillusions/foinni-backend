@@ -1,8 +1,7 @@
 import ws from 'ws';
 import jwt from 'jsonwebtoken';
 import { Request } from 'express';
-import { randomUUID } from 'crypto';
-import { Users } from '../../database/models/Users';
+import { Users, Message } from '../../database/models';
 
 interface Message {
     id: string;
@@ -16,11 +15,9 @@ interface UserData {
     id: string;
     name: string;
     photo: string;
-    err?: any;
 };
 
 const cons: { id: string; wsCon: ws; }[] = [];
-const messages: Message[] = [];
 const fetchUserData = async (token: string): Promise<UserData | string> => {
     try {
         const decoded = jwt.verify(token, 'TOP_SECRET') as { userId: string; };
@@ -55,27 +52,51 @@ export const wsChatHandler = async (ws: ws, req: Request) => {
         wsCon: ws,
     });
 
-    wsSend(ws, 'INIT', {
-        id: userData.id,
-        chatHistory: messages
-    });
+    try {
+        const chatHistory = await Message.find({}, { __v: 0 });
+
+        wsSend(ws, 'INIT', {
+            id: userData.id,
+            chatHistory: chatHistory.map((message) => ({
+                id: message._id,
+                text: message.text,
+                author: { 
+                    name: message.author.name,
+                    photo: message.author.photo,
+                },
+            })),
+        });
+    } catch(err) {
+        console.log(err);
+    }
     
-    ws.on('message', (data: string) => {
+    ws.on('message', async (data: string) => {
+        // TODO: Add text validation
         const action = JSON.parse(data);
 
         switch(action.type) {
             case 'NEW_MESSAGE': {
-                const newMessage = {
-                    id: randomUUID(),
-                    author: {
-                        name: userData.name,
-                        photo: userData.photo,
-                    },
+                const message = new Message({
+                    author: userData,
                     text: action.payload,
-                };
+                    date_added: new Date(),
+                });
 
-                messages.push(newMessage);
-                cons.forEach(({ wsCon }) => wsSend(wsCon, 'NEW_MESSAGE', newMessage));
+                try {
+                    const savedMessage = await message.save();
+    
+                    cons.forEach(({ wsCon }) => wsSend(wsCon, 'NEW_MESSAGE', {
+                        id: savedMessage._id,
+                        text: savedMessage.text,
+                        author: {
+                            name: savedMessage.author.name,
+                            photo: savedMessage.author.photo,
+                        },
+                    }));
+
+                } catch (err) {
+                    console.error(err)
+                }
                 break;
             }
 
@@ -85,6 +106,20 @@ export const wsChatHandler = async (ws: ws, req: Request) => {
                         wsSend(wsCon, 'TYPING', userData.name);
                     }
                 }); 
+                break;
+            }
+
+            case 'REMOVE_ALL': {
+                let removeStatus = true;
+
+                try {
+                    await Message.deleteMany({});   
+                } catch (err) {
+                    removeStatus = false;
+                    console.error(err);
+                }
+
+                cons.forEach(({ wsCon }) => wsSend(wsCon, 'REMOVE_ALL', removeStatus));
                 break;
             }
         }
