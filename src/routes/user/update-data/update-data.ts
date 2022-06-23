@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { Response, Request } from 'express';
-import { Users } from '../../../database/models/Users';
+import { Users, Message } from '../../../database/models';
 import { responseSender } from '../../../helpers';
 
 const schema = Joi.object().keys({ 
@@ -25,9 +25,11 @@ export const userDataHandlerPatch = async (req: Request, res: Response) => {
         return responseSender(res, 401, 'Password doesn\'t match!');
     }
 
+    // TODO: Add try/catches
     const updatedUser = await Users
         .findByIdAndUpdate(userId, fieldsToUpdate, { returnOriginal: false })
         .select(['-_id', '-__v', '-password', '-refreshHashKey']);
+    await Message.updateMany({ 'author.id': userId }, { 'author.name': `${updatedUser.firstName} ${updatedUser.lastName}`});
 
     responseSender(res, 200, `${Object.keys(fieldsToUpdate).join(', ')} updated`, updatedUser);
 }
